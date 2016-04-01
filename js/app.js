@@ -37,7 +37,7 @@
 			};
 		}]);
 
-	angular.controller('extraApp')
+	angular.module('extraApp')
 		.controller('logoutController', ['$cookies', '$location', '$scope', function ($cookies, $location, $scope) {
 			$scope.logout = function () {
 				$cookies.remove('id');
@@ -48,6 +48,24 @@
 		}]);
 
 // Angular directives
+	angular.module('extraApp')
+		.directive('getUpdates', function () {
+			return {
+				restrict: 'E',
+				templateUrl: 'temp/layout/getupdates.html',
+				controller: ['$http', function ($http) {
+					var telegram = this;
+					// Problema de seguridad, aqui se muestra el bot API name
+					$http.get('https://api.telegram.org/bot212364285:AAEiC9Ww4LCGvyNz0Us04nO_KBHEXjdy_zU/getupdates').success(function (data) {
+						telegram.updates = data;
+						angular.forEach(telegram.updates.result, function (value) {
+							// alert(value.message.text);
+						});
+					});
+				}],
+				controllerAs: 'getUpdates'
+			};
+		});
 
 // Angular login validation
 	angular.module('extraApp').
@@ -60,4 +78,3 @@
 				else { $location.path('/login'); }
 			});
 		}]);
-	
